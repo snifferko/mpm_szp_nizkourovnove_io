@@ -4,6 +4,8 @@
 #define N_POS 2
 #define FILE_NAME_POS 1
 #define FILE_DESC_MIN 0
+#define MIN_DLZKA 10
+#define MAX_DLZKA 20
 
 #include <stdio.h>
 #include <sys/types.h>

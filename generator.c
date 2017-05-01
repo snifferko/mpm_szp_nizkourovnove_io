@@ -6,6 +6,8 @@
 #define FILE_DESC_MIN 0
 #define MIN_DLZKA 10
 #define MAX_DLZKA 20
+#define MIN_VAL -100
+#define MAX_VAL 100
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -15,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <float.h>
+#include <time.h>
 
 typedef struct node{
 	struct node *next;
@@ -69,6 +72,14 @@ void print_seq_t(seq_t *s){
 	}
 }
 
+float rand_float(float min, float max)
+{
+	float range;
+
+	range=max-min;
+	return drand48()*range+min;
+}
+
 seq_t *random_seq_t(unsigned int min_n, unsigned int max_n)
 {
 	unsigned int range;
@@ -80,7 +91,7 @@ seq_t *random_seq_t(unsigned int min_n, unsigned int max_n)
 	seq=malloc(len*sizeof(float));
 
 	for(int i=0;i<len;i++)
-		seq[i]=drand48()*FLT_MAX*2-FLT_MAX;
+		seq[i]=rand_float(MIN_VAL,MAX_VAL);
 
 	return create_seq_t(seq,len);
 }
@@ -129,6 +140,7 @@ int main(int argc, char **argv){
 	print_seq_t(head);
 
 	//TEST random_seq_t
+	srand(time(NULL));	
 	s=random_seq_t(MIN_DLZKA,MAX_DLZKA);
 	add_head(s,&head);
 	s=random_seq_t(MIN_DLZKA,MAX_DLZKA);

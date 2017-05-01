@@ -50,12 +50,6 @@ void free_seq_t(seq_t *s)
 	}
 }
 
-void add_head(seq_t *new,seq_t **head)
-{
-	new->next=*head;
-	*head=new;
-}
-
 void print_seq_t(seq_t *s)
 {
 	int i;
@@ -108,6 +102,24 @@ void write_seq_t(int file_desc, seq_t *s)
 	}
 }
 
+void add_head(seq_t *new,seq_t **head)
+{
+	new->next=*head;
+	*head=new;
+}
+
+void generator(seq_t **s,unsigned int n)
+{
+	seq_t *current;
+	int i;
+
+	for(i=0;i<n;i++) {
+		current=random_seq_t(MIN_DLZKA,MAX_DLZKA);
+
+		add_head(current,s);
+	}
+}
+
 int main(int argc, char **argv)
 {
 	int file;
@@ -117,8 +129,9 @@ int main(int argc, char **argv)
 		printf("Nespravny pocet argumentov!\n");
 		return CHYBA;
 	} 
-	
-	if ( n = atoi(argv[N_POS]) < MIN_N ) {
+
+	n = atoi(argv[N_POS]); 
+	if ( n < MIN_N ) {
 		printf("Cislo n je neplatne!\n");
 		return CHYBA;
 	} 
@@ -130,36 +143,14 @@ int main(int argc, char **argv)
 		return CHYBA;
 	} 
 
-
-	float A[]={3.5,1.8,-2.4,5.665,5};
-	float *a;
-	seq_t *s;
 	seq_t *head;
 
-	//TEST kontruktoru, printu, destruktoru
-	
-	a=malloc(sizeof(A));
-	memcpy(a,A,sizeof(A));
-	s=create_seq_t(a,5);
-	print_seq_t(s);
-	
-	//TEST add_head
-
-	head=s;
-	a=malloc(sizeof(A));
-	memcpy(a,A,sizeof(A));
-	s=create_seq_t(a,5);
-	add_head(s,&head);
+	//TEST generator
+	printf("\ngenerator\n");
+	head=NULL;
+	generator(&head,n);
 	print_seq_t(head);
-
-	//TEST random_seq_t
-	srand(time(NULL));	
-	s=random_seq_t(MIN_DLZKA,MAX_DLZKA);
-	add_head(s,&head);
-	s=random_seq_t(MIN_DLZKA,MAX_DLZKA);
-	add_head(s,&head);
-	print_seq_t(head);
-	free_seq_t(s);
+	free_seq_t(head);
 
 	close(file);
 }

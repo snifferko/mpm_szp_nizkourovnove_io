@@ -124,6 +124,7 @@ int main(int argc, char **argv)
 {
 	int file;
 	int n;
+	seq_t *head;
 
 	if(argc!=ARG_COUNT){
 		printf("Nespravny pocet argumentov!\n");
@@ -131,6 +132,7 @@ int main(int argc, char **argv)
 	} 
 
 	n = atoi(argv[N_POS]); 
+
 	if ( n < MIN_N ) {
 		printf("Cislo n je neplatne!\n");
 		return CHYBA;
@@ -143,13 +145,11 @@ int main(int argc, char **argv)
 		return CHYBA;
 	} 
 
-	seq_t *head;
 
-	//TEST generator
-	printf("\ngenerator\n");
 	head=NULL;
 	generator(&head,n);
 	print_seq_t(head);
+	write_seq_t(file,head);
 	free_seq_t(head);
 
 	close(file);

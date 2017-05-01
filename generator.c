@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <float.h>
 
 typedef struct node{
 	struct node *next;
@@ -68,6 +69,22 @@ void print_seq_t(seq_t *s){
 	}
 }
 
+seq_t *random_seq_t(unsigned int min_n, unsigned int max_n)
+{
+	unsigned int range;
+	unsigned int len;
+	float *seq;
+
+	range=max_n-min_n+1;
+	len=rand()%range+min_n;
+	seq=malloc(len*sizeof(float));
+
+	for(int i=0;i<len;i++)
+		seq[i]=drand48()*FLT_MAX*2-FLT_MAX;
+
+	return create_seq_t(seq,len);
+}
+
 int main(int argc, char **argv){
 	int file;
 	int n;
@@ -102,7 +119,7 @@ int main(int argc, char **argv){
 	s=create_seq_t(a,5);
 	print_seq_t(s);
 	
-	//TEST addHead
+	//TEST add_head
 
 	head=s;
 	a=malloc(sizeof(A));
@@ -111,6 +128,12 @@ int main(int argc, char **argv){
 	add_head(s,&head);
 	print_seq_t(head);
 
+	//TEST random_seq_t
+	s=random_seq_t(MIN_DLZKA,MAX_DLZKA);
+	add_head(s,&head);
+	s=random_seq_t(MIN_DLZKA,MAX_DLZKA);
+	add_head(s,&head);
+	print_seq_t(head);
 	free_seq_t(s);
 
 	close(file);

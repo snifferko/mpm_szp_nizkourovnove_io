@@ -106,6 +106,20 @@ char read_seqs_t(int file_desc,seq_t **head){
 	return stav == CHYBA ? CHYBA : n;
 }
 
+
+
+void avg_seq_t(seq_t* s)
+{
+	int i,sum;
+
+	sum=0;
+	for(i=0; i<s->len; i++)
+	{
+		sum+=s->seq[i];
+	}
+	s->avg=sum/s->len;
+}
+
 void add_head(seq_t *new,seq_t **head)
 {
 	new->next=*head;
@@ -115,7 +129,7 @@ void add_head(seq_t *new,seq_t **head)
 int main(int argc, char **argv)
 {
 	int file;
-	int n;
+	int n,a;
 	seq_t *head;
 
 	if(argc!=ARG_COUNT){
@@ -130,11 +144,13 @@ int main(int argc, char **argv)
 		return CHYBA;
 	} 
 
-	int a = read_seqs_t(file,&head);
+	a = read_seqs_t(file,&head);
+	
 	if( a == CHYBA){
-		printf("CHYBA\n");
-		return 0;
+		printf("Nastala chyba pri citani suboru.\n");
+		return CHYBA;
 	}
+
 	print_seq_t(head);
 	printf("pocet postupnosti: %d\n",a);
 	free_seq_t(head);

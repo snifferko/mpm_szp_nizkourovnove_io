@@ -22,10 +22,10 @@
 typedef struct node{
 	struct node *next;
 	float *seq;
-	unsigned int len;
+	unsigned char len;
 } seq_t;
 
-seq_t *create_seq_t(float *seq, unsigned int len)
+seq_t *create_seq_t(float *seq, unsigned char len)
 {
 	seq_t *s=malloc(sizeof(seq_t));
 	s->seq=seq;
@@ -56,7 +56,8 @@ void add_head(seq_t *new,seq_t **head)
 	*head=new;
 }
 
-void print_seq_t(seq_t *s){
+void print_seq_t(seq_t *s)
+{
 	int i;
 
 	if(s==NULL)
@@ -83,7 +84,7 @@ float rand_float(float min, float max)
 seq_t *random_seq_t(unsigned int min_n, unsigned int max_n)
 {
 	unsigned int range;
-	unsigned int len;
+	unsigned char len;
 	float *seq;
 
 	range=max_n-min_n+1;
@@ -96,7 +97,19 @@ seq_t *random_seq_t(unsigned int min_n, unsigned int max_n)
 	return create_seq_t(seq,len);
 }
 
-int main(int argc, char **argv){
+void write_seq_t(int file_desc, seq_t *s)
+{
+	if(s==NULL)
+		return;
+	else {
+		write(file_desc,&(s->len),sizeof(char));
+		write(file_desc,s->seq,s->len*sizeof(float));
+		write_seq_t(file_desc,get_next(s));
+	}
+}
+
+int main(int argc, char **argv)
+{
 	int file;
 	int n;
 

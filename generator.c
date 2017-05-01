@@ -59,10 +59,10 @@ void print_seq_t(seq_t *s)
 	if(s==NULL)
 		return;
 	else {
-		printf("%d: ",s->len);
+//		printf("%d: ",s->len);
 		
 		for(i=0;i<s->len;i++)
-			printf("%.2f ",s->seq[i]);
+			printf("%f ",s->seq[i]);
 		
 		printf("\n");
 		print_seq_t(get_next(s));
@@ -126,6 +126,7 @@ int main(int argc, char **argv)
 	int file;
 	int n;
 	seq_t *head;
+	srand(time(NULL));
 
 	if(argc!=ARG_COUNT){
 		printf("Nespravny pocet argumentov!\n");
@@ -148,7 +149,7 @@ int main(int argc, char **argv)
 
 	head=NULL;
 	generator(&head,n);
-	print_seq_t(head);
+//	print_seq_t(head);
 	write_seq_t(file,head);
 	free_seq_t(head);
 

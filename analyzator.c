@@ -102,8 +102,8 @@ char read_seqs_t(int file_desc,seq_t **head){
 		stav = read_seq_t(file_desc,current);
 		n++;	
 	}
-	
-	return stav;
+
+	return stav == CHYBA ? CHYBA : n;
 }
 
 void add_head(seq_t *new,seq_t **head)

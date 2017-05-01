@@ -46,6 +46,12 @@ void free_seq_t(seq_t *s)
 	}
 }
 
+void add_head(seq_t *new,seq_t **head)
+{
+	new->next=*head;
+	*head=new;
+}
+
 void print_seq_t(seq_t *s){
 	int i;
 
@@ -84,15 +90,28 @@ int main(int argc, char **argv){
 	} 
 
 
-	//TEST
-
 	float A[]={3.5,1.8,-2.4,5.665,5};
-	float *a=malloc(sizeof(A));
-	memcpy(a,A,sizeof(A));
-	seq_t *s=create_seq_t(a,5);
-	print_seq_t(s);
-	free_seq_t(s);
+	float *a;
+	seq_t *s;
+	seq_t *head;
+
+	//TEST kontruktoru, printu, destruktoru
 	
+	a=malloc(sizeof(A));
+	memcpy(a,A,sizeof(A));
+	s=create_seq_t(a,5);
+	print_seq_t(s);
+	
+	//TEST addHead
+
+	head=s;
+	a=malloc(sizeof(A));
+	memcpy(a,A,sizeof(A));
+	s=create_seq_t(a,5);
+	add_head(s,&head);
+	print_seq_t(head);
+
+	free_seq_t(s);
 
 	close(file);
 }

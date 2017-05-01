@@ -3,7 +3,7 @@
 #define FILE_NAME_POS 1
 #define READ_BYTE_LIMIT 1
 #define END_OF_FILE 0
-#define OK 0
+#define OK 1
 #define FILE_DESC_MIN 1
 
 #include <stdio.h>
@@ -75,12 +75,9 @@ char read_seq_t(int file_desc, seq_t **s){
 	float *seq;
 
 	stav = read(file_desc,&len,sizeof(char));
-	
 	if(stav < READ_BYTE_LIMIT)
 		return END_OF_FILE;
 
-
-	printf("len=%d\n",len);
 	read_limit = len * sizeof(float);
 	seq = malloc(read_limit);
 	stav = read(file_desc,seq,read_limit);
@@ -90,6 +87,23 @@ char read_seq_t(int file_desc, seq_t **s){
 
 	*s=create_seq_t(seq,len);
 	return OK;
+}
+
+char read_seqs_t(int file_desc,seq_t **head){
+	int stav;
+	int n;
+	seq_t **current;
+
+	current=head;
+	stav = read_seq_t(file_desc,current);
+	n=1;
+	while(stav == OK) { 
+		current=&((*current)->next);
+		stav = read_seq_t(file_desc,current);
+		n++;	
+	}
+	
+	return stav;
 }
 
 void add_head(seq_t *new,seq_t **head)
@@ -116,7 +130,7 @@ int main(int argc, char **argv)
 		return CHYBA;
 	} 
 
-	int a = read_seq_t(file,&head);
+	int a = read_seqs_t(file,&head);
 	if( a == CHYBA){
 		printf("CHYBA\n");
 		return 0;

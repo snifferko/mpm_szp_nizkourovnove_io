@@ -27,7 +27,9 @@ typedef struct node{
 
 seq_t *create_seq_t(float *seq, unsigned char len)
 {
-	seq_t *s=malloc(sizeof(seq_t));
+	seq_t *s;
+
+	s=malloc(sizeof(seq_t));
 	s->seq=seq;
 	s->len=len;
 	s->next=NULL;
@@ -60,7 +62,7 @@ void print_seq_t(seq_t *s)
 		printf("%d: ",s->len);
 		
 		for(i=0;i<s->len;i++)
-			printf("%.1f ",s->seq[i]);
+			printf("%.2f ",s->seq[i]);
 		
 		printf("\n");
 		print_seq_t(get_next(s));
@@ -115,7 +117,6 @@ void generator(seq_t **s,unsigned int n)
 
 	for(i=0;i<n;i++) {
 		current=random_seq_t(MIN_DLZKA,MAX_DLZKA);
-
 		add_head(current,s);
 	}
 }
@@ -144,7 +145,6 @@ int main(int argc, char **argv)
 		printf("Subor sa nepodarilo otvorit.\n");
 		return CHYBA;
 	} 
-
 
 	head=NULL;
 	generator(&head,n);

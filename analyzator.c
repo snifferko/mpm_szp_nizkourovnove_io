@@ -96,7 +96,7 @@ char read_seqs_t(int file_desc,seq_t **head){
 
 	current=head;
 	stav = read_seq_t(file_desc,current);
-	n=1;
+	n=0;
 	while(stav == OK) { 
 		current=&((*current)->next);
 		stav = read_seq_t(file_desc,current);
@@ -136,6 +136,7 @@ int main(int argc, char **argv)
 		return 0;
 	}
 	print_seq_t(head);
+	printf("pocet postupnosti: %d\n",a);
 	free_seq_t(head);
 
 	close(file);

@@ -32,10 +32,10 @@ void print_seq_t(seq_t *s)
 	if(s==NULL)
 		return;
 	else {
-		printf("%d: ",s->len);
+//		printf("%d: ",s->len);
 		
 		for(i=0;i<s->len;i++)
-			printf("%.2f ",s->seq[i]);
+			printf("%f ",s->seq[i]);
 		
 		printf("\n");
 		print_seq_t(get_next(s));
@@ -67,6 +67,11 @@ void free_seq_t(seq_t *s)
 	}
 }
 
+void add_head(seq_t *new,seq_t **head)
+{
+	new->next=*head;
+	*head=new;
+}
 
 char read_seq_t(int file_desc, seq_t **s){
 	char len;
@@ -75,6 +80,7 @@ char read_seq_t(int file_desc, seq_t **s){
 	float *seq;
 
 	stav = read(file_desc,&len,sizeof(char));
+	
 	if(stav < READ_BYTE_LIMIT)
 		return END_OF_FILE;
 
@@ -97,6 +103,7 @@ char read_seqs_t(int file_desc,seq_t **head){
 	current=head;
 	stav = read_seq_t(file_desc,current);
 	n=0;
+	
 	while(stav == OK) { 
 		current=&((*current)->next);
 		stav = read_seq_t(file_desc,current);
@@ -106,31 +113,53 @@ char read_seqs_t(int file_desc,seq_t **head){
 	return stav == CHYBA ? CHYBA : n;
 }
 
-
-
 void avg_seq_t(seq_t* s)
 {
-	int i,sum;
+	int i;
+	float sum;
 
 	sum=0;
+
 	for(i=0; i<s->len; i++)
-	{
 		sum+=s->seq[i];
-	}
+	
 	s->avg=sum/s->len;
 }
 
-void add_head(seq_t *new,seq_t **head)
+void avg_seqs_t(seq_t* s)
 {
-	new->next=*head;
-	*head=new;
+	if(s == NULL)
+		return;
+	else {
+		avg_seq_t(s);
+		avg_seqs_t(get_next(s));
+	}
 }
+
+float analyzator(seq_t *s){
+	int count;
+	float sum; 
+
+	sum=0;
+	count=0;
+	
+	while(s != NULL){
+		count++;
+		sum+=s->avg;
+		s = get_next(s);
+	}
+
+	return sum/count;
+}
+
 
 int main(int argc, char **argv)
 {
 	int file;
 	int n,a;
+	float avg_avgs;
 	seq_t *head;
+
 
 	if(argc!=ARG_COUNT){
 		printf("Nespravny pocet argumentov!\n");
@@ -151,9 +180,15 @@ int main(int argc, char **argv)
 		return CHYBA;
 	}
 
+	avg_seqs_t(head);
+	avg_avgs=analyzator(head);
+
+	printf("%d\n",a);
+	printf("%f\n",avg_avgs);
 	print_seq_t(head);
-	printf("pocet postupnosti: %d\n",a);
+
 	free_seq_t(head);
 
 	close(file);
+	return 0;
 }

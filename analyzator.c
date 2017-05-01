@@ -136,7 +136,8 @@ void avg_seqs_t(seq_t* s)
 	}
 }
 
-float analyzator(seq_t *s){
+float analyzator(seq_t *s)
+{
 	int count;
 	float sum; 
 
